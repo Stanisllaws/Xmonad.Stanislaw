@@ -1,14 +1,28 @@
-Special thanks to Xmonad website : https://xmonad.org/  Github: https://github.com/xmonad/xmonad?tab=BSD-3-Clause-1-ov-file#readme
-All the documention go to Xmonad webside
+These are my personal configurations; you can use them and modify them. 
 
- xmonad.hs  should be place like this  ~/.xmonad/xmoand.hs
- xmobarrc like that  ~/.config/xmobar/xmobarrc
+Special thanks to the Xmonad website: https://xmonad.org   
 
- some of depency dependecy; 
+and GitHub: https://github.com/xmonad/xmonad
+
+All the documentation goes to the Xmonad website.
+
+ xmonad.hs should be placed in this location: ~/.xmonad/xmonad.hs.
+
+ xmobarrc over there  ~/.config/xmobar/xmobarrc
+
+ some of dependency; 
+
  - haskellPackages.xmonad-contrib
- -  xmobar
- -  wofi
+
+ - xmobar
+
+ -  rofi
+
  -  dmenu
+
  -  alacritty
+
  -  X11
+
  -  nemo
+
