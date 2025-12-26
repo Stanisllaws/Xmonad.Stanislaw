@@ -4,13 +4,13 @@ Special thanks to the Xmonad
 website: https://xmonad.org   
 GitHub: https://github.com/xmonad/xmonad
 
-for all  documentation visit Xmonad website.
+For all  documentation visit Xmonad website.
 
  xmonad.hs should be placed in this location: ~/.xmonad/xmonad.hs.
 
  xmobarrc over there  ~/.config/xmobar/xmobarrc
 
- some of dependency; 
+ Some of dependency; 
 
  - haskellPackages.xmonad-contrib
 
