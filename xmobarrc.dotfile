@@ -1,0 +1,20 @@
+Config { 
+  font = "xft:monospace:size=100:bold"
+, bgColor = "#000000"
+, fgColor = "#ffffff"
+, position = Top
+, persistent = False
+, commands = [ Run StdinReader
+             , Run Battery [ "-t", "<fc=#00ff00><acstatus></fc>"
+                           , "--"
+                           , "-o", "Bat: <left>%"
+                           , "-O", "Charging: <left>%"
+                           , "-i", "Charged"
+                           ] 100
+             , Run Volume "default" "Master" [ "-t", "<fc=#ffaa00>  <volume>%</fc>" ] 10
+             , Run Date "<fc=#ffaa00>%H:%M</fc>  <fc=#00aaff>%a %_d %b %Y</fc> " "date" 50
+             ]
+, sepChar = "%"
+, alignSep = "}{"
+, template = "Workspace | %StdinReader% }     { %default:Master%🔊    %battery%   %date%"
+}
