@@ -63,8 +63,8 @@ import qualified Data.Map        as M
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
 --
-myTerminal      = "alacritty"
-
+myTerminal      = "st"
+myTerminal2     ="alacritty"
 -- Whether focus follows the mouse pointer.
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True
@@ -93,12 +93,14 @@ myModMask       = mod4Mask
 --
 -- > workspaces = ["web", "irc", "code" ] ++ map show [4..9]
 --
-myWorkspaces    = [" 1w "," 2w "," 3w "," 4w "," 5w "," 6w  "," 7w  "," 8w  "," 9w  "]
+myWorkspaces    = [" 1w "," 2w ","3w ","4w"," 5w "," 6w  "," 7w  ","8w ","9w  "]
 
 -- Border colors for unfocused and focused windows, respectively.
 --
+--myNormalBorderColor  = "#00a2ff"
 myNormalBorderColor  = "#dddddd"
-myFocusedBorderColor = "#ff0000"
+myFocusedBorderColor = "#3cff00"
+--myFocusedBorderColor = "#00b3ff"
 
 ------------------------------------------------------------------------
 -- Scratchpad definition
@@ -106,10 +108,10 @@ myFocusedBorderColor = "#ff0000"
 myScratchpads :: [NamedScratchpad]
 myScratchpads = 
     [ NS "terminal" spawnTerm findTerm manageTerm
-    , NS "vim" spawnVim findVim manageVim
+    , NS "nvim" spawnNvim findNvim manageNvim
     ]
   where
-    spawnTerm  = myTerminal ++ " --class scratchpad"
+    spawnTerm  = myTerminal2 ++ " --class scratchpad"
     findTerm   = resource =? "scratchpad"
     manageTerm = customFloating $ W.RationalRect l t w h
       where
@@ -118,9 +120,9 @@ myScratchpads =
         t = 0.2      -- distance from top
         l = 0.2      -- distance from left
     
-    spawnVim   = "cd ~/Notes && " ++ myTerminal ++ " --class scratchpad-vim -e vim ~/Notes/scratchpad.md"
-    findVim    = resource =? "scratchpad-vim"
-    manageVim  = customFloating $ W.RationalRect l t w h
+    spawnNvim   = "cd ~/Notes && " ++ myTerminal2 ++ " --class scratchpad-nvim -e nvim ~/Notes/scratchpad.md"
+    findNvim    = resource =? "scratchpad-nvim"
+    manageNvim  = customFloating $ W.RationalRect l t w h
       where
         h = 0.7      -- height, 70%
         w = 0.7      -- width, 70%
@@ -136,13 +138,13 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
    [ ((modm, xK_Return), spawn $ XMonad.terminal conf)
 
     -- toggle scratchpad terminal
-    , ((modm,               xK_s ), namedScratchpadAction myScratchpads "terminal")
+    , ((modm,               xK_s ), namedScratchpadAction myScratchpads "terminal ")
     
     -- toggle vim scratchpad
-    , ((modm,               xK_v ), namedScratchpadAction myScratchpads "vim")
+    , ((modm,               xK_v ), namedScratchpadAction myScratchpads "nvim")
     
     -- launch dmenu
-    , ((modm .|.  mod1Mask,  xK_space ), spawn "dmenu_run")
+    --, ((modm .|.  mod1Mask,  xK_space ), spawn "dmenu_run")
     
     -- Mod+x as prefix for browsers and close window
     , ((modm, xK_w), submap . M.fromList $
@@ -170,17 +172,18 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
        ])
   
     -- Langugae kebords (Jezyki klawiatury )
-     , ((modm .|. mod1Mask , xK_j), submap . M.fromList $
+     , (( modm, xK_j), submap . M.fromList $
        [   ((0, xK_p), spawn "setxkbmap pl")
           ,((0, xK_e), spawn "setxkbmap us")  
            ])
    
 
- -- on line 183 shutdown sound. "tv" personal shell script for dispaly setting
+
    -- Sleep and exit 
       , ((modm .|.  shiftMask , xK_q), submap . M.fromList $
         [ ((0, xK_s), spawn "sleep")
-        , ((0, xK_q), spawn "mpv ~/loction/of_the_sound_directory" >> io (exitWith ExitSuccess))      , ((0, xK_l),spawn "mpv ~/loction/of_sound_directory &&  xsecurelock")          
+      , ((0, xK_q), spawn "mpv ~/Sounds/shutdownWM" >> io (exitWith ExitSuccess))      
+        , ((0, xK_l),spawn "mpv ~/Sounds/shutdownWM &&  xsecurelock")          
         , ((0, xK_d), spawn "tv")    
        ])
  
@@ -205,14 +208,25 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- launch gmrun
  --   , ((modm .|. shiftMask, xK_p     ), spawn "gmrun")
 
-    -- Volume control
+    -- Rofi progarm launcher
+    
+    , ((0, xK_F8), windows W.focusUp)
+    , ((0, xK_F9), windows W.focusDown )
+
+
+
+
+      
+
+
+   -- Volume control
     , ((0, xF86XK_AudioRaiseVolume   ), spawn "pactl set-sink-volume @DEFAULT_SINK@ +5%")
     , ((0, xF86XK_AudioLowerVolume   ), spawn "pactl set-sink-volume @DEFAULT_SINK@ -5%")
-    , ((0, xF86XK_AudioLowerVolume   ), spawn "pactl set-sink-volume @DEFAULT_SINK@ -100%")
+   -- , ((0, xF86XK_AudioLowerVolume   ), spawn "pactl set-sink-volume @DEFAULT_SINK@ -100%")
     --, ((0, xF86XK_AudioMute          ), spawn "pactl set-sink-volume @DEFAULT_SINK@ -100%")
      , ((0, xK_F3), spawn "pactl set-sink-volume @DEFAULT_SINK@ +5%")
-    , ((0,  xK_F2), spawn "pactl set-sink-volume @DEFAULT_SINK@ -5%")
-    , ((0,  xK_F1), spawn "pactl set-sink-volume @DEFAULT_SINK@   -100%")
+    , ((0,  xK_F1), spawn "pactl set-sink-volume @DEFAULT_SINK@ -5%")
+   -- , ((0,  xK_F1), spawn "pactl set-sink-volume @DEFAULT_SINK@   -100%")
     --, ((0,  xK_F1), spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
 
 
@@ -229,20 +243,20 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     --, ((modm, xK_Down), spawn "pactl set-sink-volume @DEFAULT_SINK@ -5%")
    -- , ((modm .|. controlMask, xK_m   ), spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
     -- Screen brightness control
-    , ((0, xF86XK_MonBrightnessUp    ), spawn "brightnessctl set +5")
-    , ((0, xF86XK_MonBrightnessDown  ), spawn "brightnessctl set -5")
+    --, ((0, xF86XK_MonBrightnessUp    ), spawn "brightnessctl set +5")
+    --, ((0, xF86XK_MonBrightnessDown  ), spawn "brightnessctl set -5")
     
     -- Alternative screen brightness with F keys
-    , ((0, xK_F7), spawn "brightnessctl set +5%")    -- Increase brightness
-    , ((0, xK_F6), spawn "brightnessctl set 5%-")    -- Decrease brightness
+    --, ((0, xK_F7), spawn "brightnessctl set +5%")    -- Increase brightness
+    --, ((0, xK_F6), spawn "brightnessctl set 5%-")    -- Decrease brightness
     
     -- Keyboard backlight brightness
     , ((0, xF86XK_KbdBrightnessUp    ), spawn "brightnessctl --device='dell::kbd_backlight' set +1")
     , ((0, xF86XK_KbdBrightnessDown  ), spawn "brightnessctl --device='dell::kbd_backlight' set 1-")
     
     -- Alternative keyboard brightness with F keys
-    , ((0, xK_F9), spawn "brightnessctl --device='dell::kbd_backlight' set +1")  -- Increase kbd backlight
-    , ((0, xK_F8), spawn "brightnessctl --device='dell::kbd_backlight' set 1-")  -- Decrease kbd backlight
+    , ((0, xK_F5), spawn "brightnessctl --device='dell::kbd_backlight' set +1")  -- Increase kbd backlight
+    , ((0, xK_F5), spawn "brightnessctl --device='dell::kbd_backlight' set 1-")  -- Decrease kbd backlight
 
      -- Rotate through the available layout algorithms
     , ((modm .|. controlMask,               xK_space ), sendMessage NextLayout)
@@ -260,25 +274,25 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm,               xK_Tab   ), windows W.focusDown)
 
     -- Move focus to the next window
-    , ((modm,               xK_j     ), windows W.focusDown)
+   -- , ((modm,               xK_j     ), windows W.focusDown)
 
     -- Move focus to the previous window
-    , ((modm,               xK_k     ), windows W.focusUp  )
+   -- , ((modm,               xK_k     ), windows W.focusUp  )
 
     -- Move focus to the master window
-    , ((modm,               xK_m     ), windows W.focusMaster  )
+   -- , ((modm,               xK_m     ), windows W.focusMaster  )
 
     -- Move focus to the next window
-    , ((modm,               xK_Tab   ), windows W.focusDown)
+  --  , ((modm,               xK_Tab   ), windows W.focusDown)
 
     -- Move focus to the next window
-    , ((modm,               xK_j     ), windows W.focusDown)
+   -- , ((modm,               xK_j     ), windows W.focusDown)
 
     -- Move focus to the previous window
-    , ((modm,               xK_k     ), windows W.focusUp  )
+    , ((modm,               xK_F8     ), windows W.focusUp  )
 
     -- Move focus to the master window
-    , ((modm,               xK_m     ), windows W.focusMaster  )
+   -- , ((modm,               xK_m     ), windows W.focusMaster  )
 
     -- Swap the focused window and the master window
     , ((modm .|. mod1Mask,               xK_Return), windows W.swapMaster)
@@ -436,14 +450,25 @@ myLogHook = return ()
 -- per-workspace layout choices.
 --
 -- By default, do nothing.
+-----------------------------------------------------------
+--AUTO START
+--PROGRAMMS ETC.
+---------------------------------------------------
+
 myStartupHook = do
     -- Kill xss-lock if running (it interferes with xmonad after resume)
-    spawn "pkill xss-lock || true"
+    --spawn "pkill xss-lock || true"
     -- Play startup sound
-    spawnOnce  "mpv ~/loction/StartupSound"  --directory or floder
+    spawnOnce  "mpv ~/Sounds/StartupWMsound"  --directory or floder
     -- Start Redshift fullscreen toggle monitor
-    spawnOnce  "~/.local/bin/redshift-fullscreen-toggle.sh"
-                 
+  --  spawnOnce  "~/.local/bin/redshift-fullscreen-toggle.sh"
+   --spawnOnce  "picom --backend glx &"
+
+
+
+
+      
+
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
 
