@@ -136,6 +136,10 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- launch a terminal
    [ ((modm, xK_Return), spawn $ XMonad.terminal conf)
+   
+    
+     -- Tui calendare 
+     , ((modm, xK_c), spawn "export CALCURSE_EDITOR=nvim && st -e calcurse")   
 
     -- toggle scratchpad terminal
     , ((modm,               xK_s ), namedScratchpadAction myScratchpads "terminal ")
@@ -181,7 +185,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
    -- Sleep and exit 
       , ((modm .|.  shiftMask , xK_q), submap . M.fromList $
-        [ ((0, xK_s), spawn "sleep")
+        [ ((0, xK_s), spawn "sleepd")
       , ((0, xK_q), spawn "mpv ~/Sounds/shutdownWM" >> io (exitWith ExitSuccess))      
         , ((0, xK_l),spawn "mpv ~/Sounds/shutdownWM &&  xsecurelock")          
         , ((0, xK_d), spawn "tv")    
@@ -220,13 +224,31 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
 
    -- Volume control
-    , ((0, xF86XK_AudioRaiseVolume   ), spawn "pactl set-sink-volume @DEFAULT_SINK@ +5%")
-    , ((0, xF86XK_AudioLowerVolume   ), spawn "pactl set-sink-volume @DEFAULT_SINK@ -5%")
+   -- proviuse 25.02.26
+   --, ((0, xF86XK_AudioRaiseVolume   ), spawn "pactl set-sink-volume @DEFAULT_SINK@ +5%")
+   
+   , ((0, xF86XK_AudioRaiseVolume   ), spawn "amixer set Master 5%+")
+    , ((0, xF86XK_AudioRaiseVolume   ), spawn "amixer set Master 5%-")
+
+  
+  --proviuse 25.02.26
+  --, ((0, xF86XK_AudioLowerVolume   ), spawn "pactl set-sink-volume @DEFAULT_SINK@ -5%")
+   
+
+
+
    -- , ((0, xF86XK_AudioLowerVolume   ), spawn "pactl set-sink-volume @DEFAULT_SINK@ -100%")
     --, ((0, xF86XK_AudioMute          ), spawn "pactl set-sink-volume @DEFAULT_SINK@ -100%")
-     , ((0, xK_F3), spawn "pactl set-sink-volume @DEFAULT_SINK@ +5%")
-    , ((0,  xK_F1), spawn "pactl set-sink-volume @DEFAULT_SINK@ -5%")
-   -- , ((0,  xK_F1), spawn "pactl set-sink-volume @DEFAULT_SINK@   -100%")
+     --previuse 25.02.26
+    -- , ((0, xK_F3), spawn "pactl set-sink-volume @DEFAULT_SINK@ +5%")
+    --, ((0,  xK_F1), spawn "pactl set-sink-volume @DEFAULT_SINK@ -5%")
+    
+ , ((0, xK_F3), spawn " amixer set Master 5%+")
+    , ((0,  xK_F2), spawn " amixer set Master 5%-")
+    
+
+
+  -- , ((0,  xK_F1), spawn "pactl set-sink-volume @DEFAULT_SINK@   -100%")
     --, ((0,  xK_F1), spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
 
 
@@ -243,12 +265,12 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     --, ((modm, xK_Down), spawn "pactl set-sink-volume @DEFAULT_SINK@ -5%")
    -- , ((modm .|. controlMask, xK_m   ), spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
     -- Screen brightness control
-    --, ((0, xF86XK_MonBrightnessUp    ), spawn "brightnessctl set +5")
-    --, ((0, xF86XK_MonBrightnessDown  ), spawn "brightnessctl set -5")
+    , ((0, xF86XK_MonBrightnessUp    ), spawn "brightnessctl set +5")
+    , ((0, xF86XK_MonBrightnessDown  ), spawn "brightnessctl set -5")
     
     -- Alternative screen brightness with F keys
-    --, ((0, xK_F7), spawn "brightnessctl set +5%")    -- Increase brightness
-    --, ((0, xK_F6), spawn "brightnessctl set 5%-")    -- Decrease brightness
+    , ((0, xK_F7), spawn "brightnessctl set +5%")    -- Increase brightness
+    , ((0, xK_F6), spawn "brightnessctl set 5%-")    -- Decrease brightness
     
     -- Keyboard backlight brightness
     , ((0, xF86XK_KbdBrightnessUp    ), spawn "brightnessctl --device='dell::kbd_backlight' set +1")
@@ -260,6 +282,12 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
      -- Rotate through the available layout algorithms
     , ((modm .|. controlMask,               xK_space ), sendMessage NextLayout)
+    --Screenshoot gui 
+    , ((modm,               xK_F10 ), spawn"xfce4-screenshooter") 
+
+
+
+
 
     --  Reset the layouts on the current workspace to default
     , ((mod1Mask, xK_space ), setLayout $ XMonad.layoutHook conf)
