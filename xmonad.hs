@@ -1,4 +1,4 @@
---
+--This my my xmonad.hs
 -- xmonad example config file.
 --
 -- A template showing all available configuration hooks,
